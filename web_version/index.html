@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AuraPlay RGB - Spotify Controller</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #050505 0%, #111111 100%);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: #111111;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .title {
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ff0000, #ff7f00, #ffff00, #00ff00, #00ffff, #0000ff, #8b00ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradient-shift 3s ease infinite;
+        }
+
+        @keyframes gradient-shift {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(360deg); }
+        }
+
+        .status {
+            padding: 15px;
+            background: #1DB954;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .album-art {
+            width: 300px;
+            height: 300px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            margin: 20px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #1DB954;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(29, 185, 84, 0.3);
+        }
+
+        .album-art img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .song-info {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .song-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .artist-name {
+            font-size: 14px;
+            color: #bbb;
+            margin-bottom: 15px;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #888;
+            margin: 10px 0;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 4px;
+            background: #333;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #1DB954;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            background: #1DB954;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(29, 185, 84, 0.3);
+        }
+
+        button:hover {
+            background: #1ed760;
+            transform: scale(1.1);
+            box-shadow: 0 8px 20px rgba(29, 185, 84, 0.5);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .play-btn {
+            width: 80px;
+            height: 80px;
+            font-size: 32px;
+        }
+
+        .settings {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+        }
+
+        .settings-btn {
+            background: #333;
+            width: 50px;
+            height: 50px;
+        }
+
+        .settings-btn:hover {
+            background: #444;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: #111111;
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            border: 2px solid #1DB954;
+        }
+
+        .modal-content h2 {
+            margin-bottom: 20px;
+            color: #1DB954;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #ccc;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #1DB954;
+            box-shadow: 0 0 10px rgba(29, 185, 84, 0.3);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .form-actions button {
+            flex: 1;
+        }
+
+        .cancel-btn {
+            background: #333 !important;
+        }
+
+        .cancel-btn:hover {
+            background: #444 !important;
+        }
+
+        .error {
+            color: #ff6b6b;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .clock {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #1DB954;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+
+            .album-art {
+                width: 250px;
+                height: 250px;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="clock" id="clock">00:00:00</div>
+            <h1 class="title">🎮 AuraPlay RGB</h1>
+            <div class="status" id="status">Connecting...</div>
+        </div>
+
+        <div class="album-art">
+            <img id="albumArt" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 300 300'%3E%3Crect fill='%231DB954' width='300' height='300'/%3E%3Ccircle cx='150' cy='150' r='30' fill='%23000'/%3E%3C/svg%3E" alt="Album Art">
+        </div>
+
+        <div class="song-info">
+            <div class="song-name" id="songName">No Song Playing</div>
+            <div class="artist-name" id="artistName"></div>
+            <div class="progress-container">
+                <span id="progressTime">0:00</span>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <span id="durationTime">0:00</span>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button id="prevBtn" title="Previous">⏮</button>
+            <button class="play-btn" id="playBtn" title="Play/Pause">▶</button>
+            <button id="nextBtn" title="Next">⏭</button>
+        </div>
+
+        <div class="settings">
+            <button class="settings-btn" id="settingsBtn" title="Settings">⚙️</button>
+        </div>
+    </div>
+
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <h2>Settings</h2>
+            <div class="form-group">
+                <label>Client ID</label>
+                <input type="text" id="clientId" placeholder="Your Spotify Client ID">
+            </div>
+            <div class="form-group">
+                <label>Client Secret</label>
+                <input type="password" id="clientSecret" placeholder="Your Spotify Client Secret">
+            </div>
+            <div class="form-group">
+                <label>Redirect URI</label>
+                <input type="text" id="redirectUri" placeholder="http://127.0.0.1:8888/callback" value="http://127.0.0.1:8888/callback">
+            </div>
+            <div id="error" class="error"></div>
+            <div class="form-actions">
+                <button class="cancel-btn" onclick="closeSettings()">Cancel</button>
+                <button onclick="saveSettings()">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock API calls for demo
+        let currentSong = null;
+        let isPlaying = false;
+
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').textContent = now.toLocaleTimeString();
+        }
+
+        function formatTime(ms) {
+            const seconds = Math.floor(ms / 1000);
+            const minutes = Math.floor(seconds / 60);
+            return `${minutes}:${(seconds % 60).toString().padStart(2, '0')}`;
+        }
+
+        function updateUI() {
+            // This would connect to actual Spotify API or backend
+            // For now, show placeholder
+            document.getElementById('status').textContent = '✓ Ready';
+            document.getElementById('status').style.background = '#1DB954';
+        }
+
+        function openSettings() {
+            document.getElementById('settingsModal').classList.add('active');
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+
+        function saveSettings() {
+            const clientId = document.getElementById('clientId').value;
+            const clientSecret = document.getElementById('clientSecret').value;
+            
+            if (!clientId || !clientSecret) {
+                document.getElementById('error').textContent = 'Please enter both Client ID and Secret';
+                return;
+            }
+
+            localStorage.setItem('spotifyConfig', JSON.stringify({
+                clientId,
+                clientSecret,
+                redirectUri: document.getElementById('redirectUri').value
+            }));
+
+            closeSettings();
+            document.getElementById('status').textContent = '✓ Credentials Saved';
+        }
+
+        // Event listeners
+        document.getElementById('settingsBtn').addEventListener('click', openSettings);
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            console.log('Previous track');
+        });
+        document.getElementById('playBtn').addEventListener('click', () => {
+            console.log('Play/Pause');
+            isPlaying = !isPlaying;
+            document.getElementById('playBtn').textContent = isPlaying ? '⏸' : '▶';
+        });
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            console.log('Next track');
+        });
+
+        // Initial setup
+        updateClock();
+        setInterval(updateClock, 1000);
+        updateUI();
+
+        // Load saved credentials
+        const saved = localStorage.getItem('spotifyConfig');
+        if (saved) {
+            const config = JSON.parse(saved);
+            document.getElementById('clientId').value = config.clientId;
+            document.getElementById('clientSecret').value = config.clientSecret;
+            document.getElementById('redirectUri').value = config.redirectUri;
+        }
+    </script>
+</body>
+</html>

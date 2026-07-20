@@ -1,0 +1,12 @@
+{
+  "buildCommand": "echo 'Web version ready'",
+  "installCommand": "echo 'No install needed'",
+  "public": true,
+  "cleanUrls": true,
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/index.html"
+    }
+  ]
+}

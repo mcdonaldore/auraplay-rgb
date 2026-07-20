@@ -1,0 +1,18 @@
+{
+  "name": "auraplay-rgb",
+  "version": "1.0.0",
+  "description": "Spotify RGB Controller for Windows, iOS, and Android",
+  "license": "MIT",
+  "author": "AuraPlay",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/auraplay-rgb.git"
+  },
+  "keywords": [
+    "spotify",
+    "controller",
+    "rgb",
+    "music",
+    "app"
+  ]
+}
