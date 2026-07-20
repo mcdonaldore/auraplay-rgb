@@ -1,12 +1,14 @@
 {
-  "buildCommand": "echo 'Web version ready'",
-  "installCommand": "echo 'No install needed'",
-  "public": true,
-  "cleanUrls": true,
-  "redirects": [
+  "builds": [
     {
-      "source": "/",
-      "destination": "/index.html"
+      "src": "app.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "app.py"
     }
   ]
 }
