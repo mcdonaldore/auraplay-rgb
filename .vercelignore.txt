@@ -1,0 +1,39 @@
+
+# Local Environment Files (Prevent pushing secrets/keys)
+.env
+.env*.local
+.env.development
+.env.test
+
+# Heavy Python / Virtual Environments (If present)
+.venv
+venv
+ENV/
+env/
+__pycache__/
+*.pyc
+
+# Build Artifacts & Desktop Binaries
+build/
+dist/
+desktop/
+*.spec
+
+*.exe
+*.dmg
+
+# Dependencies & Caches
+node_modules/
+.cache/
+.next/
+.nuxt/
+
+# Version Control & IDE Settings
+.git/
+.github/
+.vscode/
+.idea/
+
+# OS-generated Files
+.DS_Store
+Thumbs.db
