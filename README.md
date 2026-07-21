@@ -40,17 +40,6 @@ cd AuraPlay-RGB
 ./AuraPlay-RGB
 ```
 
-### Android / iOS
-
-#### Web Version
-1. Visit: [https://auraplay-rgb.vercel.app](https://auraplay-rgb.vercel.app)
-2. Save to home screen for app-like experience
-3. Scan QR code: (QR code will be provided)
-
-#### Mobile App
-- Android: Available on Google Play Store
-- iOS: Available on Apple App Store
-
 ## First Time Setup
 
 ### Get Spotify Credentials
@@ -81,9 +70,8 @@ Web Version:
 - macOS 10.14+
 - Linux (Ubuntu 18.04+)
 
-### Mobile
-- iOS 13+
-- Android 6.0+
+
+
 
 ### Internet
 - Active internet connection required
@@ -107,10 +95,9 @@ Web Version:
 - Restart AuraPlay
 
 ## Source Code
-- [GitHub Repository](https://github.com/yourusername/auraplay-rgb)
-- MIT License
+- [GitHub Repository](https://github.com/mcdonaldore/auraplay-rgb)
+
 
 ## Support
-- Email: support@auraplay.dev
-- Discord: [Join Server](https://discord.gg/)
-- Issues: [GitHub Issues](https://github.com/yourusername/auraplay-rgb/issues)
+- Email: oreoluwamuyiwaojo@gmail.com 
+- Issues: [GitHub Issues](https://github.com/mcdonaldore/auraplay-rgb/issues)
